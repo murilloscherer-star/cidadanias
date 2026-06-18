@@ -3,56 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cidadania Digital & IA</title>
+    <title>Cidadania Digital: O Jogo</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <header>
-        <h1>Cidadania Digital & IA</h1>
-        <p>O Impacto das Deepfakes e da Desinformação na Sociedade</p>
+        <h1>CyberCidadão: O Jogo da Verdade</h1>
+        <p>Você consegue proteger sua rede contra as Deepfakes e a Desinformação?</p>
         <button id="toggle-dark-mode">Alternar Tema 🌙</button>
     </header>
 
     <main>
-        <section class="card">
-            <h2>O que são Deepfakes?</h2>
-            <p>Deepfakes são vídeos, áudios ou imagens modificados de forma realista por meio de algoritmos de Inteligência Artificial. Embora a tecnologia possa ser usada para o entretenimento, ela frequentemente é aplicada para criar conteúdos enganosos, arruinar reputações e espalhar desinformação em massa.</p>
-        </section>
-
-        <section class="card">
-            <h2>Como identificar a Desinformação?</h2>
-            <ul>
-                <li><strong>Verifique a fonte:</strong> O portal de notícias é confiável?</li>
-                <li><strong>Analise os detalhes:</strong> Deepfakes costumam ter falhas no piscar de olhos ou na sincronia da fala.</li>
-                <li><strong>Cruze informações:</strong> Procure a mesma notícia em outros veículos de comunicação conhecidos.</li>
-                <li><strong>Não compartilhe por impulso:</strong> Na dúvida, não repasse.</li>
-            </ul>
-        </section>
-
-        <section class="card quiz-section">
-            <h2>Desafio: Você sabe identificar uma Fake News?</h2>
-            <p>Leia a frase abaixo e responda se ela é Verdadeira ou Falsa:</p>
-            <blockquote class="headline">"Vídeo mostra robô controlado por IA correndo pelas ruas a 100km/h e perseguindo pedestres."</blockquote>
-            
-            <form id="quiz-form">
-                <div class="options">
-                    <label>
-                        <input type="radio" name="quiz-answer" value="verdadeiro"> Verdadeiro
-                    </label>
-                    <label>
-                        <input type="radio" name="quiz-answer" value="falso"> Falso (É Fake!)
-                    </label>
+        <section class="score-container">
+            <div class="score-card">
+                <h3>Sua Reputação Digital</h3>
+                <div id="reputation-bar-container">
+                    <div id="reputation-bar">100%</div>
                 </div>
-                <button type="submit" class="btn-submit">Enviar Resposta</button>
-            </form>
-            <div id="quiz-result" class="result-message"></div>
+            </div>
+        </section>
+
+        <section class="card game-box">
+            <div id="game-intro">
+                <h2>Instruções do Jogo</h2>
+                <p>Analise os casos recebidos nas suas redes sociais. Escolha se você vai <strong>Compartilhar</strong> ou <strong>Denunciar/Deletar</strong>. Suas escolhas afetam sua reputação digital!</p>
+                <button id="start-btn" class="btn-primary">Começar Jogo</button>
+            </div>
+
+            <div id="game-play" class="hidden">
+                <h2 id="question-number">Cenário 1</h2>
+                <div class="scenery-box">
+                    <p id="scenery-text">Carregando cenário...</p>
+                </div>
+                
+                <div class="game-choices">
+                    <button id="choice-share" class="btn-game btn-danger">Compartilhar no Grupo 🔄</button>
+                    <button id="choice-delete" class="btn-game btn-success">Apagar e Investigar 🔍</button>
+                </div>
+            </div>
+
+            <div id="game-over" class="hidden">
+                <h2>Fim de Jogo!</h2>
+                <p id="final-message">Resultado</p>
+                <button id="restart-btn" class="btn-primary">Jogar Novamente</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Manual de Sobrevivência Digital</h2>
+            <p>Em ambientes digitais, robôs e contas automatizadas criam narrativas falsas em segundos. Sempre desconfie de títulos bombásticos, imagens com falhas de iluminação (sinais de deepfake) e links de sites desconhecidos.</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 - Projeto Escolar de Educação Digital e IA</p>
-        <p>Desenvolvido para fins educacionais.</p>
+        <p>&copy; 2026 - Atividade Prática de Educação Digital e IA | Tag: #cidadaniadigital2026</p>
     </footer>
 
     <script src="js/script.js"></script>
