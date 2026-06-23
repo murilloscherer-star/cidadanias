@@ -1,101 +1,179 @@
-// Banco de dados dos cenários do jogo
-const cenarios = [
-    {
-        texto: "Seu amigo mandou um vídeo de um candidato político confessando um crime. A voz parece robótica e os lábios não sincronizam bem. O que você faz?",
-        escolhaCorreta: "delete"
-    },
-    {
-        texto: "Um portal famoso publicou uma notícia urgente sobre uma nova cura para uma doença, com links para fontes científicas reais. O que você faz?",
-        escolhaCorreta: "share"
-    },
-    {
-        texto: "Mensagem no grupo da família diz que o governo vai cancelar a internet amanhã. O link é de um blog cheio de anúncios e erros de português. O que você faz?",
-        escolhaCorreta: "delete"
-    }
+// Banco de dados temático das palavras do Jogo da Forca
+const bancoPalavras = [
+    { palavra: "DEEPFAKE", dica: "Vídeo ou áudio modificado realisticamente com uso de Inteligência Artificial." },
+    { palavra: "ALGORITMO", dica: "Instruções automatizadas que decidem quais mentiras se espalham mais rápido nas redes." },
+    { palavra: "CHECAGEM", dica: "Ação necessária de cruzar dados antes de compartilhar qualquer conteúdo suspeito." },
+    { palavra: "ROBO", dica: "Conta automatizada usada para simular engajamento humano e inflar fake news." },
+    { palavra: "FONTE", dica: "A primeira coisa que devemos verificar em um portal para saber se a notícia é real." },
+    { palavra: "DESINFORMACAO", dica: "Conteúdo intencionalmente falso criado para enganar ou prejudicar a sociedade." }
 ];
 
-let cenarioAtual = 0;
-let reputacao = 100;
+// Estado global das variáveis do jogo
+let palavraEscolhida = "";
+let dicaEscolhida = "";
+let letrasAdivinhadas = [];
+let errosCometidos = 0;
+const limiteErros = 6;
 
-// Mapeamento dos elementos do HTML
-const btnStart = document.getElementById('start-btn');
-const btnRestart = document.getElementById('restart-btn');
-const btnShare = document.getElementById('choice-share');
-const btnDelete = document.getElementById('choice-delete');
-const btnDarkMode = document.getElementById('toggle-dark-mode');
+// Seletores do DOM - Jogo da Forca
+const elWordDisplay = document.getElementById("word-display");
+const elWordTip = document.getElementById("word-tip");
+const elRobotStatus = document.getElementById("robot-status");
+const elLivesLeft = document.getElementById("lives-left");
+const elKeyboard = document.getElementById("keyboard");
+const elGameMessage = document.getElementById("game-message");
+const elMessageText = document.getElementById("message-text");
+const elBtnRestart = document.getElementById("btn-restart");
 
-const viewIntro = document.getElementById('game-intro');
-const viewPlay = document.getElementById('game-play');
-const viewGameOver = document.getElementById('game-over');
+// Seletores do DOM - Recursos Adicionais e Formulários
+const btnDarkMode = document.getElementById("toggle-dark-mode");
+const communityForm = document.getElementById("community-form");
+const formFeedback = document.getElementById("form-feedback");
 
-const txtQuestionNumber = document.getElementById('question-number');
-const txtScenery = document.getElementById('scenery-text');
-const txtFinalMessage = document.getElementById('final-message');
-const barReputation = document.getElementById('reputation-bar');
+// --- FUNÇÕES DE INICIALIZAÇÃO DO JOGO ---
 
-// Função para iniciar o jogo
 function iniciarJogo() {
-    cenarioAtual = 0;
-    reputacao = 100;
-    atualizarBarra();
-    viewIntro.classList.add('hidden');
-    viewGameOver.classList.add('hidden');
-    viewPlay.classList.remove('hidden');
-    carregarCenario();
+    // Escolhe um item aleatório do banco de dados
+    const itemAleatorio = bancoPalavras[Math.floor(Math.random() * bancoPalavras.length)];
+    palavraEscolhida = itemAleatorio.palavra;
+    dicaEscolhida = itemAleatorio.dica;
+    
+    // Reseta o estado das variáveis
+    letrasAdivinhadas = [];
+    errosCometidos = 0;
+    
+    // Limpa e atualiza a interface visual
+    elWordTip.innerText = dicaEscolhida;
+    elLivesLeft.innerText = limiteErros - errosCometidos;
+    elRobotStatus.innerHTML = `Progresso do Robô: <span style="color: var(--success-color);">Seguro</span>`;
+    
+    elGameMessage.classList.add("hidden");
+    elGameMessage.className = "game-message-box hidden";
+    
+    renderizarPalavra();
+    criarTeclado();
 }
 
-// Função para carregar os textos na tela
-function carregarCenario() {
-    if (cenarioAtual < cenarios.length) {
-        txtQuestionNumber.innerText = `Cenário ${cenarioAtual + 1}`;
-        txtScenery.innerText = cenarios[cenarioAtual].texto;
-    } else {
-        finalizarJogo();
+// Renderiza os tracinhos na tela baseados nas letras adivinhadas
+function renderizarPalavra() {
+    elWordDisplay.innerHTML = "";
+    
+    for (let letra of palavraEscolhida) {
+        const span = document.createElement("span");
+        if (letrasAdivinhadas.includes(letra)) {
+            span.innerText = letra;
+        } else {
+            span.innerText = "_";
+        }
+        elWordDisplay.appendChild(span);
     }
 }
 
-// Função para processar a escolha do usuário
-function processarEscolha(escolha) {
-    const respostaCorreta = cenarios[cenarioAtual].escolhaCorreta;
+// Cria dinamicamente os botões do teclado virtual de A a Z
+function criarTeclado() {
+    elKeyboard.innerHTML = "";
+    const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
-    if (escolha !== respostaCorreta) {
-        reputacao -= 35; // Remove pontos se errar
-        if (reputacao < 0) reputacao = 0;
-    } else {
-        reputacao += 10; // Bônus leve se acertar
-        if (reputacao > 100) reputacao = 100;
-    }
-    
-    atualizarBarra();
-    cenarioAtual++;
-    carregarCenario();
-}
-
-// Atualiza o visual da barra de progresso
-function atualizarBarra() {
-    barReputation.style.width = `${reputacao}%`;
-    barReputation.innerText = `${reputacao}%`;
-}
-
-// Mostra a tela final do jogo
-function finalizarJogo() {
-    viewPlay.classList.add('hidden');
-    viewGameOver.classList.remove('hidden');
-    
-    if (reputacao >= 70) {
-        txtFinalMessage.innerText = `Parabéns! Sua reputação final foi de ${reputacao}%. Você é um CyberCidadão exemplar!`;
-    } else {
-        txtFinalMessage.innerText = `Fim de jogo! Sua reputação caiu para ${reputacao}%. Você precisa treinar mais suas habilidades de checagem.`;
+    for (let letra of alfabeto) {
+        const botao = document.createElement("button");
+        botao.innerText = letra;
+        botao.classList.add("btn-letter");
+        
+        // Evento de clique para processar a tentativa da letra
+        botao.addEventListener("click", () => verificarTentativa(letra, botao));
+        elKeyboard.appendChild(botao);
     }
 }
 
-// Ouvintes de eventos (Cliques)
-btnStart.addEventListener('click', iniciarJogo);
-btnRestart.addEventListener('click', iniciarJogo);
-btnShare.addEventListener('click', () => processarEscolha('share'));
-btnDelete.addEventListener('click', () => processarEscolha('delete'));
+// --- LOGICA PRINCIPAL DO JOGO DA FORCA ---
 
-// Alternador de Modo Escuro do Jogo
-btnDarkMode.addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
+function verificarTentativa(letra, botao) {
+    botao.disabled = true; // Desativa o botão após o clique para evitar cliques repetidos
+    
+    if (palavraEscolhida.includes(letra)) {
+        letrasAdivinhadas.push(letra);
+        renderizarPalavra();
+        verificarVitoria();
+    } else {
+        errosCometidos++;
+        elLivesLeft.innerText = limiteErros - errosCometidos;
+        atualizarStatusRobo();
+        verificarDerrota();
+    }
+}
+
+function atualizarStatusRobo() {
+    if (errosCometidos === 2) {
+        elRobotStatus.innerHTML = `Progresso do Robô: <span style="color: orange;">IA gerando scripts falsos...</span>`;
+    } else if (errosCometidos === 4) {
+        elRobotStatus.innerHTML = `Progresso do Robô: <span style="color: var(--danger-color);">Deepfake enviada para renderização!</span>`;
+    }
+}
+
+function verificarVitoria() {
+    // Se não houver mais nenhum traço (_) visível, o jogador venceu
+    const palavraAtual = elWordDisplay.innerText.replace(/\s/g, "");
+    if (palavraAtual === palavraEscolhida) {
+        desativarTeclado();
+        elMessageText.innerText = "🎉 Excelente! Você descobriu a palavra e impediu o Robô de espalhar a Fake News!";
+        elGameMessage.classList.remove("hidden");
+        elGameMessage.classList.add("win");
+    }
+}
+
+function verificarDerrota() {
+    if (errosCometidos >= limiteErros) {
+        desativarTeclado();
+        elRobotStatus.innerHTML = `Progresso do Robô: 💥 <span style="color: var(--danger-color);">Ataque Concluído! A desinformação infectou a rede.</span>`;
+        elMessageText.innerText = `❌ Fim de jogo! A IA maliciosa venceu. A palavra era: ${palavraEscolhida}`;
+        elGameMessage.classList.remove("hidden");
+        elGameMessage.classList.add("lose");
+    }
+}
+
+function desativarTeclado() {
+    const botoes = elKeyboard.querySelectorAll("button");
+    botoes.forEach(b => b.disabled = true);
+}
+
+// --- REQUISITOS ADICIONAIS DA RUBRICA (ACESSIBILIDADE E FORMULÁRIO) ---
+
+// Botão de Alternar Modo Escuro (Acessibilidade)
+btnDarkMode.addEventListener("click", () => {
+    document.body.classList.toggle("dark-theme");
+    if (document.body.classList.contains("dark-theme")) {
+        btnDarkMode.innerText = "Alternar Tema ☀️";
+    } else {
+        btnDarkMode.innerText = "Alternar Tema 🌙";
+    }
 });
+
+// Interceptação do Formulário com Validação de Variáveis e Manipulação do DOM
+communityForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // Impede o recarregamento padrão da página
+    
+    // Captura e processamento das variáveis antes de exibir na tela
+    const nomeUsuario = document.getElementById("user-name").value;
+    const experienciaUsuario = document.getElementById("user-experience").value;
+    
+    let mensagemResposta = `Obrigado pelo envio, ${nomeUsuario}! `;
+    
+    if (experienciaUsuario === "sim" || experienciaUsuario === "frequente") {
+        mensagemResposta += "Seus dados confirmam o alto índice de exposição comunitária a conteúdos sintéticos de IA.";
+    } else {
+        mensagemResposta += "Seus dados ajudam a mapear o nível de detecção precoce de fraudes virtuais.";
+    }
+    
+    // Exibe o retorno do banco de dados fictício na tela alterando classes dinamicamente
+    formFeedback.innerText = mensagemResposta;
+    formFeedback.classList.remove("hidden");
+    
+    // Reseta os campos do formulário de forma limpa
+    communityForm.reset();
+});
+
+// Vincula o botão de reiniciar à função inicializadora
+elBtnRestart.addEventListener("click", iniciarJogo);
+
+// Executa a carga inicial do jogo assim que o script finaliza a leitura
+iniciarJogo();
