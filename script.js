@@ -3,9 +3,9 @@ const bancoPalavras = [
     { palavra: "DEEPFAKE", dica: "Vídeo ou áudio modificado realisticamente com uso de Inteligência Artificial." },
     { palavra: "ALGORITMO", dica: "Instruções automatizadas que decidem quais mentiras se espalham mais rápido nas redes." },
     { palavra: "CHECAGEM", dica: "Ação necessária de cruzar dados antes de compartilhar qualquer conteúdo suspeito." },
-    { palavra: "ROBO", dica: "Conta automatizada usada para simular engajamento humano e inflar fake news." },
+    { palavra: "ROBÔ", dica: "Conta automatizada usada para simular engajamento humano e inflar fake news." },
     { palavra: "FONTE", dica: "A primeira coisa que devemos verificar em um portal para saber se a notícia é real." },
-    { palavra: "DESINFORMACAO", dica: "Conteúdo intencionalmente falso criado para enganar ou prejudicar a sociedade." }
+    { palavra: "DESINFORMAÇÃO", dica: "Conteúdo intencionalmente falso criado para enganar ou prejudicar a sociedade." }
 ];
 
 // Estado global das variáveis do jogo
@@ -29,6 +29,11 @@ const elBtnRestart = document.getElementById("btn-restart");
 const btnDarkMode = document.getElementById("toggle-dark-mode");
 const communityForm = document.getElementById("community-form");
 const formFeedback = document.getElementById("form-feedback");
+
+// Função auxiliar para remover acentos e facilitar a comparação das letras
+function removerAcentos(texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
 // --- FUNÇÕES DE INICIALIZAÇÃO DO JOGO ---
 
@@ -60,8 +65,11 @@ function renderizarPalavra() {
     
     for (let letra of palavraEscolhida) {
         const span = document.createElement("span");
-        if (letrasAdivinhadas.includes(letra)) {
-            span.innerText = letra;
+        // Remove o acento da letra da palavra original para comparar com o que o usuário chutou
+        const letraSemAcento = removerAcentos(letra);
+        
+        if (letrasAdivinhadas.includes(letraSemAcento)) {
+            span.innerText = letra; // Mostra a letra original com acento na tela
         } else {
             span.innerText = "_";
         }
@@ -85,13 +93,16 @@ function criarTeclado() {
     }
 }
 
-// --- LOGICA PRINCIPAL DO JOGO DA FORCA ---
+// --- LÓGICA PRINCIPAL DO JOGO DA FORCA ---
 
-function verificarTentativa(letra, botao) {
-    botao.disabled = true; // Desativa o botão após o clique para evitar cliques repetidos
+function verificarTentativa(letraChutada, botao) {
+    botao.disabled = true; // Desativa o botão após o clique
     
-    if (palavraEscolhida.includes(letra)) {
-        letrasAdivinhadas.push(letra);
+    // Transforma toda a palavra secreta em letras sem acento para testar o clique do jogador
+    const palavraSemAcento = removerAcentos(palavraEscolhida);
+    
+    if (palavraSemAcento.includes(letraChutada)) {
+        letrasAdivinhadas.push(letraChutada);
         renderizarPalavra();
         verificarVitoria();
     } else {
@@ -111,9 +122,10 @@ function atualizarStatusRobo() {
 }
 
 function verificarVitoria() {
-    // Se não houver mais nenhum traço (_) visível, o jogador venceu
-    const palavraAtual = elWordDisplay.innerText.replace(/\s/g, "");
-    if (palavraAtual === palavraEscolhida) {
+    // Pega o texto atual exibido nos spans (removendo espaços)
+    const palavraExibidaNaTela = elWordDisplay.innerText.replace(/\s/g, "");
+    
+    if (palavraExibidaNaTela === palavraEscolhida) {
         desativarTeclado();
         elMessageText.innerText = "🎉 Excelente! Você descobriu a palavra e impediu o Robô de espalhar a Fake News!";
         elGameMessage.classList.remove("hidden");
