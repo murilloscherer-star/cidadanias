@@ -3,108 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Cidadania Digital e IA</title>
-    <!-- Link para o arquivo de estilização externa -->
-    <link rel="stylesheet" href="css/style.css">
+    <title>Cidadania Digital: O Perigo dos Deepfakes</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Cabeçalho com título, descrição e botão de acessibilidade exigido na rubrica -->
     <header>
-        <div class="header-container">
-            <h1>Cidadania Digital & Inteligência Artificial</h1>
-            <p>Guia Comunitário contra Deepfakes e a Desinformação Automatizada</p>
-            <button id="toggle-dark-mode" class="btn-accessibility" aria-label="Alternar modo escuro">Alternar Tema 🌙</button>
-        </div>
+        <h1>Cidadania Digital & IA</h1>
+        <p>Conscientização contra os perigos da desinformação e deepfakes</p>
+        <button id="toggle-dark-mode" aria-label="Alternar modo escuro">Alternar Modo Escuro</button>
     </header>
 
-    <!-- Conteúdo Principal Semântico -->
     <main>
-        <!-- Seção 1: Portal Informativo e de Conscientização -->
-        <section class="card section-info">
-            <h2>O Perigo das Mentiras Automatizadas</h2>
-            <p>Com o avanço da Inteligência Artificial, robôs conseguem espalhar desinformação em massa e criar <strong>Deepfakes</strong> (vídeos e áudios falsos altamente realistas) em poucos segundos. Proteger-se na rede virou um dever cidadão.</p>
+        <section id="sobre">
+            <h2>O que são Deepfakes?</h2>
+            <p>Deepfakes são vídeos, áudios ou imagens gerados por Inteligência Artificial que alteram rostos e vozes para fazer pessoas parecerem dizer ou fazer coisas que nunca aconteceram. Eles representam uma grande ameaça à verdade e à democracia.</p>
             
-            <div class="info-grid">
-                <div class="info-item">
-                    <h3>🔍 Como Identificar</h3>
-                    <p>Fique atento a piscadas não naturais, falhas na iluminação do rosto, áudios com ruídos metálicos estranhos e notícias sem fontes confiáveis.</p>
+            <div class="cards-container">
+                <div class="card">
+                    <h3>Como identificar?</h3>
+                    <p>Fique atento a piscadas não naturais, falhas na pele, sombras estranhas ao redor dos olhos e áudio dessincronizado.</p>
                 </div>
-                <div class="info-item">
-                    <h3>🛡️ Como Agir</h3>
-                    <p>Nunca compartilhe links por impulso emocional. Sempre cruze as informações com portais de checagem oficiais antes de enviar a terceiros.</p>
+                <div class="card">
+                    <h3>O Impacto</h3>
+                    <p>Podem arruinar reputações, fraudar sistemas de segurança e espalhar notícias falsas em massa nas redes sociais.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Seção 2: Desafio Técnico Interativo - O Jogo da Forca -->
-        <section class="card section-game">
-            <h2>Jogo da Forca: Bloqueie a Fake News</h2>
-            <p>Descubra a palavra secreta sobre segurança digital antes que o <strong>Robô da Desinformação</strong> complete o upload do algoritmo falso!</p>
+        <section id="quiz-section">
+            <h2>Desafio: Você sabe identificar um Deepfake?</h2>
+            <p>Teste seus conhecimentos respondendo à pergunta abaixo:</p>
             
-            <div class="game-container">
-                <!-- Status do Robô (Substituto visual do desenho da forca) -->
-                <div class="game-status-box">
-                    <p id="robot-status">Progresso do Robô: <strong>Aguardando comando...</strong></p>
-                    <div id="lives-counter">Erros restantes: <span id="lives-left">6</span></div>
-                </div>
+            <form id="quiz-form">
+                <p class="question">Qual das opções abaixo é um forte indício de que um vídeo pode ser um deepfake?</p>
+                
+                <label>
+                    <input type="radio" name="resposta" value="errada1" required> 
+                    O vídeo possui alta resolução e cores vivas.
+                </label>
+                
+                <label>
+                    <input type="radio" name="resposta" value="correta"> 
+                    Movimentos faciais robóticos, sombras desalinhadas e falta de piscadas naturais.
+                </label>
+                
+                <label>
+                    <input type="radio" name="resposta" value="errada2"> 
+                    O vídeo foi gravado em um ambiente fechado.
+                </label>
 
-                <!-- Dica da Palavra Atual -->
-                <div class="tip-box">
-                    <p>💡 <strong>Dica:</strong> <span id="word-tip">Carregando dica...</span></p>
-                </div>
-
-                <!-- Exibição dos Traços da Palavra -->
-                <div id="word-display" class="word-letters"></div>
-
-                <!-- Teclado Virtual Gerado Dinamicamente -->
-                <div id="keyboard" class="keyboard-container"></div>
-
-                <!-- Caixa de Mensagem de Fim de Jogo -->
-                <div id="game-message" class="game-message-box hidden">
-                    <p id="message-text"></p>
-                    <button id="btn-restart" class="btn-primary">Próxima Palavra</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção 3: Coleta de Dados Comunidária (Formulário Obrigatório) -->
-        <section class="card section-form">
-            <h2>Termômetro da Desinformação na Comunidade</h2>
-            <p>Ajude nossa pesquisa escolar respondendo ao formulário rápido abaixo:</p>
-            
-            <form id="community-form">
-                <div class="form-group">
-                    <label for="user-name">Seu Nome ou Pseudônimo:</label>
-                    <input type="text" id="user-name" required placeholder="Ex: Maria Silva">
-                </div>
-
-                <div class="form-group">
-                    <label for="user-experience">Você já viu alguma Deepfake ou notícia falsa gerada por IA nesta semana?</label>
-                    <select id="user-experience" required>
-                        <option value="">Selecione uma opção...</option>
-                        <option value="sim">Sim, com certeza</option>
-                        <option value="nao">Não vi ou não tenho certeza</option>
-                        <option value="frequente">Vejo quase todos os dias nas redes sociais</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn-submit">Enviar para o Banco de Dados</button>
+                <button type="submit" id="btn-submit">Verificar Resposta</button>
             </form>
-            <div id="form-feedback" class="feedback-message hidden"></div>
+
+            <div id="resultado-quiz" class="hidden"></div>
         </section>
     </main>
 
-    <!-- Rodapé Oficial com a Tag Exigida pelo Cronograma -->
     <footer>
-        <div class="footer-container">
-            <p>&copy; 2026 - Projeto Escolar de Educação Digital | Ensino Médio</p>
-            <p class="tag-project">Tag do Repositório: <strong>#cidadaniadigital2026</strong></p>
-        </div>
+        <p>&copy; 2026 - Projeto de Educação Digital e Computação. Todos os direitos reservados.</p>
+        <p>Desenvolvido para fins educacionais no combate à desinformação.</p>
     </footer>
 
-    <!-- Script JavaScript para processamento dinâmico -->
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-
