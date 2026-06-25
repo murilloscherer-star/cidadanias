@@ -1,16 +1,52 @@
-<section id="jogo-forca">
-    <h2>Jogo da Forca: Bloqueie a Fake News</h2>
-    <p>Descubra a palavra secreta sobre segurança digital antes que o <strong>Robô da Desinformação</strong> complete o upload do algoritmo falso!</p>
-    
-    <div class="painel-jogo">
-        <p id="progresso-robo">Progresso do Robô: <span id="status-robo">Aguardando comando...</span></p>
-        <p>Erros restantes: <span id="erros-contagem">6</span></p>
-        <p id="dica-jogo">💡 Dica: <span id="texto-dica">Carregando dica...</span></p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca - Tech Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Jogo da Forca</h1>
+        <p class="tip">Dica: <span id="tip-text">...</span></p>
         
-        <div id="palavra-container"></div>
+        <div class="gallows-container">
+            <svg height="250" width="200" class="gallows">
+                <!-- Estrutura da forca -->
+                <line x1="20" y1="230" x2="100" y2="230" class="base" />
+                <line x1="60" y1="20" x2="60" y2="230" class="pole" />
+                <line x1="60" y1="20" x2="140" y2="20" class="beam" />
+                <line x1="140" y1="20" x2="140" y2="50" class="rope" />
+                <!-- Partes do corpo (escondidas por padrão no CSS) -->
+                <circle cx="140" cy="70" r="20" id="head" class="body-part" />
+                <line x1="140" y1="90" x2="140" y2="150" id="body" class="body-part" />
+                <line x1="140" y1="110" x2="110" y2="130" id="left-arm" class="body-part" />
+                <line x1="140" y1="110" x2="170" y2="130" id="right-arm" class="body-part" />
+                <line x1="140" y1="150" x2="110" y2="190" id="left-leg" class="body-part" />
+                <line x1="140" y1="150" x2="170" y2="190" id="right-leg" class="body-part" />
+            </svg>
+        </div>
+
+        <div class="word-container" id="word-display"></div>
+        <div class="keyboard" id="keyboard"></div>
         
-        <div id="teclado-container"></div>
-        
-        <button id="btn-proxima-palavra">Próxima Palavra</button>
+        <div class="score-board">
+            Tentativas restantes: <span id="attempts">6</span>
+        </div>
+
+        <button id="reset-btn" class="btn">Reiniciar Jogo</button>
     </div>
-</section>
+
+    <!-- Modal de Fim de Jogo -->
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Fim de Jogo</h2>
+            <p id="modal-message"></p>
+            <button id="modal-btn" class="btn">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
