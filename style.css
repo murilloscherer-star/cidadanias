@@ -1,21 +1,20 @@
 /* Estilos do Jogo da Forca */
 .painel-jogo {
-    background-color: var(--card-bg);
+    background-color: #1e1e1e; /* Cor escura de fundo para combinar com seu tema anterior */
+    color: #ffffff;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-top: 1rem;
 }
 
 #palavra-container {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    font-size: 2rem;
+    gap: 15px;
+    font-size: 2.2rem;
     font-weight: bold;
-    letter-spacing: 5px;
     margin: 2rem 0;
-    min-height: 40px;
+    min-height: 50px;
 }
 
 #teclado-container {
@@ -24,51 +23,55 @@
     justify-content: center;
     gap: 8px;
     margin-bottom: 1.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.letca-btn {
+.letra-btn {
     padding: 10px 15px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border: 2px solid var(--primary-color);
+    background-color: #333333;
+    color: #ffffff;
+    border: 2px solid #1a73e8;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
+    min-width: 45px;
 }
 
-.letca-btn:hover:not(:disabled) {
-    background-color: var(--primary-color);
+.letra-btn:hover:not(:disabled) {
+    background-color: #1a73e8;
     color: white;
 }
 
-.letca-btn:disabled {
-    opacity: 0.4;
+.letra-btn:disabled {
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
-/* Cores de feedback para os botões do teclado */
-.letca-btn.correta {
+.letra-btn.correta {
     background-color: #28a745 !important;
+    border-color: #28a745 !important;
     color: white !important;
-    border-color: #28a745;
 }
 
-.letca-btn.errada {
+.letra-btn.errada {
     background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
     color: white !important;
-    border-color: #dc3545;
 }
 
 #btn-proxima-palavra {
     display: block;
-    margin: 0 auto;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: #333;
+    margin: 2rem auto 0 auto;
+    padding: 12px 24px;
+    background-color: #ffc107;
+    color: #000000;
     border: none;
     border-radius: 4px;
     font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
 }
