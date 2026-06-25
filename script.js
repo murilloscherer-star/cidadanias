@@ -1,13 +1,45 @@
-// Banco de palavras temáticas (Tecnologia/Programação)
+// Banco de dados focado em Cidadania Digital, IA e Desinformação
 const wordsDatabase = [
-    { word: "JAVASCRIPT", tip: "Linguagem de programação web" },
-    { word: "COMPUTADOR", tip: "Máquina usada para processar dados" },
-    { word: "INTERNET", tip: "Rede mundial de computadores" },
-    { word: "ALGORITMO", tip: "Sequência de passos para resolver um problema" },
-    { word: "BANCO", tip: "Local onde guardamos dados do sistema (Ex: ... de dados)" },
-    { word: "ROUTER", tip: "Dispositivo que encaminha pacotes de rede" },
-    { word: "PYTHON", tip: "Linguagem famosa pela sintaxe limpa e IA" },
-    { word: "FRONTEND", tip: "Parte visual de um site com a qual o usuário interage" }
+    { 
+        word: "DEEPFAKE", 
+        tip: "Vídeos ou áudios realistas gerados por IA para simular a fala e ações de pessoas reais.",
+        edu: "As deepfakes são usadas para aplicar golpes, arruinar reputações e manipular debates políticos, tornando difícil discernir o que é real na internet."
+    },
+    { 
+        word: "ALGORITMO", 
+        tip: "Mecanismo que decide quais postagens aparecem primeiro nas suas redes sociais.",
+        edu: "Os algoritmos priorizam conteúdos que geram forte engajamento emocional (como ódio e polêmica), o que facilita a propagação rápida de desinformação."
+    },
+    { 
+        word: "DESINFORMACAO", 
+        tip: "Criação e compartilhamento deliberado de informações falsas para enganar e obter vantagens.",
+        edu: "Diferente do erro honesto, a desinformação é uma estratégia armada para distorcer a percepção pública, corroer a confiança nas instituições e polarizar a sociedade."
+    },
+    { 
+        word: "COMPROVACAO", 
+        tip: "Ato essencial de checar a veracidade de uma notícia antes de clicar em compartilhar.",
+        edu: "A checagem de fatos (Fact-checking) é o pilar da cidadania digital. Verificar fontes oficiais quebra o ciclo de compartilhamento de fake news."
+    },
+    { 
+        word: "BOTS", 
+        tip: "Contas automatizadas programadas para simular comportamento humano em massa nas redes.",
+        edu: "Redes de robôs são frequentemente compradas para inflar artificialmente hashtags, criar falsos consensos políticos e silenciar vozes legítimas."
+    },
+    { 
+        word: "ALFABETIZACAO", 
+        tip: "Habilidade de ler, analisar de forma crítica e produzir conteúdos na mídia digital.",
+        edu: "A alfabetização midiática capacita os cidadãos a identificarem vieses, propagandas e manipulações visuais em plataformas digitais."
+    },
+    { 
+        word: "PRIVACIDADE", 
+        tip: "Direito de controlar a coleta e o uso dos seus dados pessoais por sistemas de IA.",
+        edu: "Empresas cruzam seus dados de navegação para criar perfis psicológicos profundos, permitindo que anúncios políticos direcionados manipulem sua intenção de voto."
+    },
+    { 
+        word: "VIES", 
+        tip: "Preconceito ou tendência sistemática presente nos dados usados para treinar uma Inteligência Artificial.",
+        edu: "Se os dados de treinamento forem discriminatórios, a IA perpetuará racismos e injustiças de forma automatizada no mercado de trabalho e segurança pública."
+    }
 ];
 
 let selectedWordObj;
@@ -16,10 +48,8 @@ let guessedLetters;
 let wrongAttempts;
 const maxAttempts = 6;
 
-// Elementos da interface do boneco na forca
 const bodyParts = ["head", "body", "left-arm", "right-arm", "left-leg", "right-leg"];
 
-// Elementos do DOM
 const wordDisplay = document.getElementById("word-display");
 const keyboardContainer = document.getElementById("keyboard");
 const attemptsSpan = document.getElementById("attempts");
@@ -28,44 +58,42 @@ const resetBtn = document.getElementById("reset-btn");
 const modal = document.getElementById("result-modal");
 const modalTitle = document.getElementById("modal-title");
 const modalMessage = document.getElementById("modal-message");
+const eduText = document.getElementById("edu-text");
 const modalBtn = document.getElementById("modal-btn");
 
-// Inicia uma nova rodada
 function initGame() {
-    // Escolhe palavra aleatória
     selectedWordObj = wordsDatabase[Math.floor(Math.random() * wordsDatabase.length)];
     selectedWord = selectedWordObj.word;
     
-    // Reseta estados
     guessedLetters = [];
     wrongAttempts = 0;
     attemptsSpan.innerText = maxAttempts - wrongAttempts;
     tipText.innerText = selectedWordObj.tip;
 
-    // Limpa a forca visual
     bodyParts.forEach(part => {
         document.getElementById(part).classList.remove("show");
     });
 
-    // Fecha o modal se estiver aberto
     modal.classList.remove("show");
 
     createWordDisplay();
     createKeyboard();
 }
 
-// Cria os espaços vazios da palavra na tela
 function createWordDisplay() {
     wordDisplay.innerHTML = "";
     for (let letter of selectedWord) {
         const slot = document.createElement("div");
-        slot.classList.add("letter-slot");
-        slot.innerText = guessedLetters.includes(letter) ? letter : "";
+        if (letter === " ") {
+            slot.classList.add("letter-slot", "space");
+        } else {
+            slot.classList.add("letter-slot");
+            slot.innerText = guessedLetters.includes(letter) ? letter : "";
+        }
         wordDisplay.appendChild(slot);
     }
 }
 
-// Cria o teclado virtual (A-Z)
 function createKeyboard() {
     keyboardContainer.innerHTML = "";
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -79,7 +107,6 @@ function createKeyboard() {
     }
 }
 
-// Processa o palpite da letra clicada
 function handleGuess(letter, button) {
     button.disabled = true;
 
@@ -97,7 +124,6 @@ function handleGuess(letter, button) {
     }
 }
 
-// Mostra a parte do corpo correspondente ao erro
 function drawBodyPart() {
     const partId = bodyParts[wrongAttempts];
     if (partId) {
@@ -105,31 +131,32 @@ function drawBodyPart() {
     }
 }
 
-// Verifica se o jogador acertou todas as letras
 function checkWin() {
-    const hasWon = [...selectedWord].every(letter => guessedLetters.includes(letter));
+    const cleanWord = selectedWord.replace(/\s/g, '');
+    const hasWon = [...cleanWord].every(letter => guessedLetters.includes(letter));
     if (hasWon) {
-        showEndModal("Você Venceu! 🎉", `Parabéns, você descobriu a palavra: ${selectedWord}`);
+        showEndModal("Você Acertou! 🛡️", `A palavra conceitual é: ${selectedWord}`, true);
     }
 }
 
-// Verifica se o jogador estourou o limite de erros
 function checkLose() {
     if (wrongAttempts >= maxAttempts) {
-        showEndModal("Fim de Jogo 😢", `Que pena! A palavra certa era: ${selectedWord}`);
+        showEndModal("O Conhecimento Perdeu... 💥", `A resposta correta era: ${selectedWord}`, false);
     }
 }
 
-// Exibe a tela de resultado final
-function showEndModal(title, message) {
+function showEndModal(title, message, isWin) {
     modalTitle.innerText = title;
+    modalTitle.style.color = isWin ? "var(--accent-color)" : "var(--wrong-color)";
     modalMessage.innerText = message;
+    
+    // Exibe a explicação pedagógica sobre o termo do jogo
+    eduText.innerText = selectedWordObj.edu;
+    
     modal.classList.add("show");
 }
 
-// Event Listeners para botões de reset
 resetBtn.addEventListener("click", initGame);
 modalBtn.addEventListener("click", initGame);
 
-// Executa ao carregar a página
 window.onload = initGame;
