@@ -1,85 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cidadania Digital & Inteligência Artificial</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <header>
-        <h1>Cidadania Digital & Inteligência Artificial</h1>
-        <p class="subtitle">Guia Comunitário contra Deepfakes e a Desinformação Automatizada</p>
-        <button id="toggle-dark-mode">Alternar Tema 🌙</button>
-    </header>
-
-    <main>
-        <section id="sobre">
-            <h2>O Perigo das Mentiras Automatizadas</h2>
-            <p>Com o avanço da Inteligência Artificial, robôs conseguem espalhar desinformação em massa e criar <strong>Deepfakes</strong> (vídeos e áudios falsos altamente realistas) em poucos segundos. Proteger-se na rede virou um dever cidadão.</p>
-            
-            <div class="info-blocks">
-                <div class="block">
-                    <h3>🔍 Como Identificar</h3>
-                    <p>Fique atento a piscadas não naturais, falhas na iluminação do rosto, áudios com ruídos metálicos estranhos e notícias sem fontes confiáveis.</p>
-                </div>
-                <div class="block">
-                    <h3>🛡️ Como Agir</h3>
-                    <p>Nunca compartilhe links por impulso emocional. Sempre cruze as informações com portais de checagem oficiais antes de enviar a terceiros.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="jogo-forca">
-            <h2>Jogo da Forca: Bloqueie a Fake News</h2>
-            <p>Descubra a palavra secreta sobre segurança digital antes que o <strong>Robô da Desinformação</strong> complete o upload do algoritmo falso!</p>
-            
-            <div class="game-container">
-                <p id="robo-status">Progresso do Robô: <span id="status-texto">Aguardando comando...</span></p>
-                <p id="erros-container">Erros restantes: <span id="erros-contagem">6</span></p>
-                <p id="dica-container">💡 Dica: <span id="dica-texto">Carregando dica...</span></p>
-                
-                <div id="palavra-container"></div>
-                
-                <div id="teclado"></div>
-                
-                <button id="btn-proxima" class="btn-primary">Próxima Palavra</button>
-            </div>
-        </section>
-
-        <section id="termometro">
-            <h2>Termómetro da Desinformação na Comunidade</h2>
-            <p>Ajuste nossa pesquisa escolar respondendo ao formulário rápido abaixo:</p>
-            
-            <form id="form-pesquisa">
-                <div class="form-group">
-                    <label for="nome">Seu Nome ou Pseudónimo:</label>
-                    <input type="text" id="nome" placeholder="Ex: Maria Silva" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="pergunta-ia">Você já viu alguma Deepfake ou notícia falsa gerada por IA nesta semana?</label>
-                    <select id="pergunta-ia" required>
-                        <option value="">Selecione uma opção...</option>
-                        <option value="sim-muitas">Sim, muitas vezes</option>
-                        <option value="sim-poucas">Sim, uma ou duas vezes</option>
-                        <option value="nao">Não vi nenhuma</option>
-                        <option value="nao-sei">Não sei identificar</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn-primary">Enviar para o Banco de Dados</button>
-            </form>
-            <div id="mensagem-feedback" class="hidden"></div>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2026 - Projeto Escolar de Educação Digital | Ensino Médio</p>
-        <p>Tag do Repositório: <strong>#cidadaniadigital2026</strong></p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+<section id="jogo-forca">
+    <h2>Jogo da Forca: Bloqueie a Fake News</h2>
+    <p>Descubra a palavra secreta sobre segurança digital antes que o <strong>Robô da Desinformação</strong> complete o upload do algoritmo falso!</p>
+    
+    <div class="painel-jogo">
+        <p id="progresso-robo">Progresso do Robô: <span id="status-robo">Aguardando comando...</span></p>
+        <p>Erros restantes: <span id="erros-contagem">6</span></p>
+        <p id="dica-jogo">💡 Dica: <span id="texto-dica">Carregando dica...</span></p>
+        
+        <div id="palavra-container"></div>
+        
+        <div id="teclado-container"></div>
+        
+        <button id="btn-proxima-palavra">Próxima Palavra</button>
+    </div>
+</section>
