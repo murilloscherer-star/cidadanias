@@ -1,126 +1,135 @@
-// --- LÓGICA DO JOGO DA FORCA CORRIGIDA ---
-
-// Banco de palavras sobre Cidadania Digital e IA
-const bancoPalavras = [
-    { palavra: "DEEPFAKE", dica: "Vídeo ou áudio gerado por IA que altera rostos e vozes." },
-    { palavra: "ALGORITMO", dica: "Conjunto de regras robóticas que controlam o que você vê nas redes." },
-    { palavra: "PRIVACIDADE", dica: "Direito de proteger seus dados pessoais na internet." },
-    { palavra: "VERIFICAR", dica: "Ação necessária antes de compartilhar uma notícia suspeita." },
-    { palavra: "PHISHING", dica: "Golpe digital para roubar senhas e dados fingindo ser uma empresa." }
+// Banco de palavras temáticas (Tecnologia/Programação)
+const wordsDatabase = [
+    { word: "JAVASCRIPT", tip: "Linguagem de programação web" },
+    { word: "COMPUTADOR", tip: "Máquina usada para processar dados" },
+    { word: "INTERNET", tip: "Rede mundial de computadores" },
+    { word: "ALGORITMO", tip: "Sequência de passos para resolver um problema" },
+    { word: "BANCO", tip: "Local onde guardamos dados do sistema (Ex: ... de dados)" },
+    { word: "ROUTER", tip: "Dispositivo que encaminha pacotes de rede" },
+    { word: "PYTHON", tip: "Linguagem famosa pela sintaxe limpa e IA" },
+    { word: "FRONTEND", tip: "Parte visual de um site com a qual o usuário interage" }
 ];
 
-let palavraEscolhida = "";
-let dicaEscolhida = "";
-let letrasAdivinhadas = [];
-let errosRestantes = 6;
+let selectedWordObj;
+let selectedWord;
+let guessedLetters;
+let wrongAttempts;
+const maxAttempts = 6;
 
-// Função principal que roda o jogo
-function iniciarJogo() {
-    errosRestantes = 6;
-    letrasAdivinhadas = [];
+// Elementos da interface do boneco na forca
+const bodyParts = ["head", "body", "left-arm", "right-arm", "left-leg", "right-leg"];
+
+// Elementos do DOM
+const wordDisplay = document.getElementById("word-display");
+const keyboardContainer = document.getElementById("keyboard");
+const attemptsSpan = document.getElementById("attempts");
+const tipText = document.getElementById("tip-text");
+const resetBtn = document.getElementById("reset-btn");
+const modal = document.getElementById("result-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalMessage = document.getElementById("modal-message");
+const modalBtn = document.getElementById("modal-btn");
+
+// Inicia uma nova rodada
+function initGame() {
+    // Escolhe palavra aleatória
+    selectedWordObj = wordsDatabase[Math.floor(Math.random() * wordsDatabase.length)];
+    selectedWord = selectedWordObj.word;
     
-    // Seleciona uma palavra aleatória do banco
-    const itemAleatorio = bancoPalavras[Math.floor(Math.random() * bancoPalavras.length)];
-    palavraEscolhida = itemAleatorio.palavra;
-    dicaEscolhida = itemAleatorio.dica;
+    // Reseta estados
+    guessedLetters = [];
+    wrongAttempts = 0;
+    attemptsSpan.innerText = maxAttempts - wrongAttempts;
+    tipText.innerText = selectedWordObj.tip;
 
-    // Atualiza os textos na tela
-    document.getElementById("texto-dica").textContent = dicaEscolhida;
-    document.getElementById("erros-contagem").textContent = errosRestantes;
-    
-    const statusRobo = document.getElementById("status-robo");
-    statusRobo.textContent = "Aguardando comando... (0% de upload do vírus)";
-    statusRobo.style.color = "inherit";
+    // Limpa a forca visual
+    bodyParts.forEach(part => {
+        document.getElementById(part).classList.remove("show");
+    });
 
-    desenharPalavra();
-    gerarTeclado();
+    // Fecha o modal se estiver aberto
+    modal.classList.remove("show");
+
+    createWordDisplay();
+    createKeyboard();
 }
 
-function desenharPalavra() {
-    const palavraContainer = document.getElementById("palavra-container");
-    palavraContainer.innerHTML = "";
-    
-    // Monta os traços ou letras descobertas
-    for (let letra of palavraEscolhida) {
-        if (letrasAdivinhadas.includes(letra)) {
-            palavraContainer.innerHTML += `<span>${letra}</span>`;
-        } else {
-            palavraContainer.innerHTML += `<span>_</span>`;
-        }
-    }
-
-    // Verifica se o jogador acertou todas as letras
-    const ganhou = !palavraContainer.textContent.includes("_");
-    if (ganhou) {
-        const statusRobo = document.getElementById("status-robo");
-        statusRobo.textContent = "🎉 FAKE NEWS BLOQUEADA! Você salvou a rede!";
-        statusRobo.style.color = "#28a745";
-        bloquearTeclado();
-    }
-}
-
-function gerarTeclado() {
-    const tecladoContainer = document.getElementById("teclado-container");
-    tecladoContainer.innerHTML = "";
-    const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    for (let letra of alfabeto) {
-        const botao = document.createElement("button");
-        botao.textContent = letra;
-        botao.classList.add("letra-btn"); // Nome da classe corrigido para bater com o CSS
-        
-        botao.addEventListener("click", () => verificarLetra(letra, botao));
-        tecladoContainer.appendChild(botao);
+// Cria os espaços vazios da palavra na tela
+function createWordDisplay() {
+    wordDisplay.innerHTML = "";
+    for (let letter of selectedWord) {
+        const slot = document.createElement("div");
+        slot.classList.add("letter-slot");
+        slot.innerText = guessedLetters.includes(letter) ? letter : "";
+        wordDisplay.appendChild(slot);
     }
 }
 
-function verificarLetra(letra, botao) {
-    botao.disabled = true; 
+// Cria o teclado virtual (A-Z)
+function createKeyboard() {
+    keyboardContainer.innerHTML = "";
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
+    for (let letter of alphabet) {
+        const button = document.createElement("button");
+        button.innerText = letter;
+        button.classList.add("key");
+        button.addEventListener("click", () => handleGuess(letter, button));
+        keyboardContainer.appendChild(button);
+    }
+}
 
-    if (palavraEscolhida.includes(letra)) {
-        letrasAdivinhadas.push(letra);
-        botao.classList.add("correta");
-        desenharPalavra();
+// Processa o palpite da letra clicada
+function handleGuess(letter, button) {
+    button.disabled = true;
+
+    if (selectedWord.includes(letter)) {
+        button.classList.add("correct");
+        guessedLetters.push(letter);
+        createWordDisplay();
+        checkWin();
     } else {
-        errosRestantes--;
-        botao.classList.add("errada");
-        document.getElementById("erros-contagem").textContent = errosRestantes;
-        atualizarStatusRobo();
+        button.classList.add("wrong");
+        drawBodyPart();
+        wrongAttempts++;
+        attemptsSpan.innerText = maxAttempts - wrongAttempts;
+        checkLose();
     }
 }
 
-function atualizarStatusRobo() {
-    const statusRobo = document.getElementById("status-robo");
-    
-    // Dicionário de mensagens corrigido (Corrigido de percentages para porcentagens)
-    const porcentagens = {
-        5: "⚠️ Robô Iniciando... (15% de upload)",
-        4: "⚠️ Robô Processando dados falsos... (35% de upload)",
-        3: "⚠️ Robô Espalhando bots... (55% de upload)",
-        2: "🔥 PERIGO! Servidores sendo atacados... (75% de upload)",
-        1: "🔥 CRÍTICO! IA prestes a disparar em massa... (90% de upload)",
-        0: "💀 GAME OVER! O Robô completou o upload da Fake News."
-    };
-
-    statusRobo.textContent = porcentagens[errosRestantes] || "";
-
-    if (errosRestantes === 0) {
-        statusRobo.style.color = "#dc3545";
-        // Revela a palavra correta para o usuário ao perder
-        document.getElementById("palavra-container").innerHTML = `<span>${palavraEscolhida}</span>`;
-        bloquearTeclado();
+// Mostra a parte do corpo correspondente ao erro
+function drawBodyPart() {
+    const partId = bodyParts[wrongAttempts];
+    if (partId) {
+        document.getElementById(partId).classList.add("show");
     }
 }
 
-function bloquearTeclado() {
-    const botoes = document.querySelectorAll(".letra-btn");
-    botoes.forEach(b => b.disabled = true);
+// Verifica se o jogador acertou todas as letras
+function checkWin() {
+    const hasWon = [...selectedWord].every(letter => guessedLetters.includes(letter));
+    if (hasWon) {
+        showEndModal("Você Venceu! 🎉", `Parabéns, você descobriu a palavra: ${selectedWord}`);
+    }
 }
 
-// Garante que o código só vai rodar DEPOIS que o HTML carregar por completo
-window.onload = function() {
-    iniciarJogo();
-    
-    // Configura o botão de próxima palavra
-    document.getElementById("btn-proxima-palavra").addEventListener("click", iniciarJogo);
-};
+// Verifica se o jogador estourou o limite de erros
+function checkLose() {
+    if (wrongAttempts >= maxAttempts) {
+        showEndModal("Fim de Jogo 😢", `Que pena! A palavra certa era: ${selectedWord}`);
+    }
+}
+
+// Exibe a tela de resultado final
+function showEndModal(title, message) {
+    modalTitle.innerText = title;
+    modalMessage.innerText = message;
+    modal.classList.add("show");
+}
+
+// Event Listeners para botões de reset
+resetBtn.addEventListener("click", initGame);
+modalBtn.addEventListener("click", initGame);
+
+// Executa ao carregar a página
+window.onload = initGame;
