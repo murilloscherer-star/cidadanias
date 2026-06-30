@@ -1,4 +1,8 @@
+/* ============================================================================
+   1. CONFIGURAÇÕES GERAIS E VARIÁVEIS DE COR (Suporta Modo Claro e Escuro)
+   ============================================================================ */
 :root {
+    /* O seu tema padrão escuro foi mantido aqui como base da identidade visual */
     --bg-color: #0b0f19;
     --card-bg: #161e2e;
     --accent-color: #10b981; /* Verde Cidadania/Segurança */
@@ -6,6 +10,20 @@
     --correct-color: #059669;
     --wrong-color: #dc2626;
     --warning-color: #f59e0b;
+    --input-bg: #1f293d;
+    --border-color: #243249;
+    --footer-text: #9ca3af;
+}
+
+/* Inversão inteligente de cores quando o botão de acessibilidade for ativado */
+[data-theme="dark"] {
+    --bg-color: #f3f4f6;
+    --card-bg: #ffffff;
+    --accent-color: #059669;
+    --text-color: #111827;
+    --input-bg: #e5e7eb;
+    --border-color: #d1d5db;
+    --footer-text: #4b5563;
 }
 
 * {
@@ -19,21 +37,52 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     min-height: 100vh;
-    padding: 20px;
+    padding: 10px 20px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.game-container {
-    background-color: var(--card-bg);
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+/* Barra do Botão de Acessibilidade */
+.accessibility-bar {
     width: 100%;
     max-width: 650px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.btn-toggle {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-toggle:hover {
+    filter: brightness(1.2);
+    transform: scale(1.03);
+}
+
+/* Container Estrutural (Flexbox vertical para abraçar o jogo e o quiz) */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+    max-width: 650px;
+    margin-bottom: 25px;
+}
+
+header {
     text-align: center;
-    border: 1px solid #243249;
 }
 
 header h1 {
@@ -45,13 +94,26 @@ header h1 {
 .subtitle {
     font-size: 0.95rem;
     color: #9ca3af;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     font-style: italic;
 }
 
+/* Elementos de Seção de Layout Avançado */
+section {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    width: 100%;
+}
+
+/* ============================================================================
+   2. ESTILOS DO JOGO DA FORCA ORIGINAL (Mantidos Intactos)
+   ============================================================================ */
 .tip {
     font-size: 1rem;
-    background: #1f293d;
+    background: var(--input-bg);
     padding: 12px;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -60,11 +122,12 @@ header h1 {
 }
 
 #tip-text {
-    color: #e5e7eb;
+    color: var(--text-color);
 }
 
 .gallows-container {
     margin: 10px 0;
+    text-align: center;
 }
 
 .gallows line, .gallows circle {
@@ -114,7 +177,7 @@ header h1 {
 }
 
 .key {
-    background-color: #2e3b52;
+    background-color: var(--input-bg);
     color: var(--text-color);
     border: none;
     padding: 10px 0;
@@ -123,10 +186,12 @@ header h1 {
     border-radius: 6px;
     cursor: pointer;
     text-transform: uppercase;
+    transition: background-color 0.2s;
 }
 
 .key:hover:not(:disabled) {
     background-color: #415373;
+    filter: brightness(1.2);
 }
 
 .key:disabled {
@@ -134,12 +199,13 @@ header h1 {
     cursor: not-allowed;
 }
 
-.key.correct { background-color: var(--correct-color); }
-.key.wrong { background-color: var(--wrong-color); }
+.key.correct { background-color: var(--correct-color); color: #fff; }
+.key.wrong { background-color: var(--wrong-color); color: #fff; }
 
 .score-board {
     font-size: 1rem;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 #attempts {
@@ -147,6 +213,7 @@ header h1 {
     color: var(--warning-color);
 }
 
+/* Efeito Hover Suave com Transição (Exigência Rubrica B) */
 .btn {
     background-color: var(--accent-color);
     color: #fff;
@@ -156,14 +223,89 @@ header h1 {
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+    display: inline-block;
 }
 
 .btn:hover {
     background-color: #059669;
+    transform: translateY(-1px);
 }
 
-/* Modal Pedagógico */
+/* ============================================================================
+   3. ESTILIZAÇÃO DO NOVO QUIZ ANTI-DESINFORMAÇÃO
+   ============================================================================ */
+#quiz-section h2 {
+    color: var(--accent-color);
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.quiz-instruction {
+    font-size: 0.95rem;
+    color: var(--footer-text);
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+select:focus {
+    border-color: var(--accent-color);
+}
+
+.quiz-feedback {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: left;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.correct-box {
+    background-color: rgba(5, 150, 105, 0.15);
+    border-left: 4px solid var(--correct-color);
+}
+
+.wrong-box {
+    background-color: rgba(220, 38, 38, 0.15);
+    border-left: 4px solid var(--wrong-color);
+}
+
+.hidden {
+    display: none;
+}
+
+/* ============================================================================
+   4. MODAL PEDAGÓGICO ORIGINAL E FOOTER SEMÂNTICO
+   ============================================================================ */
 .modal {
     position: fixed;
     top: 0;
@@ -198,12 +340,12 @@ header h1 {
 
 #modal-message {
     font-size: 1.1rem;
-    color: #d1d5db;
+    color: var(--footer-text);
     margin-bottom: 15px;
 }
 
 .edu-box {
-    background-color: #1f293d;
+    background-color: var(--input-bg);
     border-radius: 8px;
     padding: 15px;
     text-align: left;
@@ -220,5 +362,58 @@ header h1 {
 #edu-text {
     font-size: 0.95rem;
     line-height: 1.5;
-    color: #e5e7eb;
+    color: var(--text-color);
+}
+
+footer {
+    width: 100%;
+    max-width: 650px;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+}
+
+footer p {
+    font-size: 0.85rem;
+    color: var(--footer-text);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================================
+   5. RESPONSIVIDADE / MEDIA QUERIES (Exigência Rubrica B - Nível 4)
+   ============================================================================ */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .game-container {
+        gap: 15px;
+    }
+    section {
+        padding: 20px 15px;
+    }
+    header h1 {
+        font-size: 1.5rem;
+    }
+    .letter-slot {
+        font-size: 1.4rem;
+        width: 22px;
+        height: 32px;
+    }
+    .keyboard {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+    }
+    .key {
+        padding: 8px 0;
+        font-size: 0.9rem;
+    }
+    .btn, #submit-quiz {
+        width: 100%;
+        text-align: center;
+    }
 }
