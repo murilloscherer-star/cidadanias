@@ -1,6 +1,3 @@
-// ============================================================================
-// 1. BANCO DE DADOS (Mantido Original e Temático)
-// ============================================================================
 const wordsDatabase = [
     { 
         word: "DEEPFAKE", 
@@ -39,12 +36,11 @@ const wordsDatabase = [
     },
     { 
         word: "VIES", 
-        tip: "Preconto ou tendência sistemática presente nos dados usados para treinar uma Inteligência Artificial.",
+        tip: "Preconceito ou tendência sistemática presente nos dados usados para treinar uma Inteligência Artificial.",
         edu: "Se os dados de treinamento forem discriminatórios, a IA perpetuará racismos e injustiças de forma automatizada no mercado de trabalho e segurança pública."
     }
 ];
 
-// Variables de controle do Jogo
 let selectedWordObj;
 let selectedWord;
 let guessedLetters;
@@ -52,7 +48,6 @@ let wrongAttempts;
 const maxAttempts = 6;
 const bodyParts = ["head", "body", "left-arm", "right-arm", "left-leg", "right-leg"];
 
-// Elementos capturados do DOM para o Jogo
 const wordDisplay = document.getElementById("word-display");
 const keyboardContainer = document.getElementById("keyboard");
 const attemptsSpan = document.getElementById("attempts");
@@ -64,29 +59,28 @@ const modalMessage = document.getElementById("modal-message");
 const eduText = document.getElementById("edu-text");
 const modalBtn = document.getElementById("modal-btn");
 
-// ============================================================================
-// 2. LÓGICA DO JOGO DA FORCA ORIGINAL (Mantida Intacta)
-// ============================================================================
 function initGame() {
     selectedWordObj = wordsDatabase[Math.floor(Math.random() * wordsDatabase.length)];
     selectedWord = selectedWordObj.word;
     
     guessedLetters = [];
     wrongAttempts = 0;
-    attemptsSpan.innerText = maxAttempts - wrongAttempts;
-    tipText.innerText = selectedWordObj.tip;
+    if(attemptsSpan) attemptsSpan.innerText = maxAttempts - wrongAttempts;
+    if(tipText) tipText.innerText = selectedWordObj.tip;
 
     bodyParts.forEach(part => {
-        document.getElementById(part).classList.remove("show");
+        const el = document.getElementById(part);
+        if(el) el.classList.remove("show");
     });
 
-    modal.classList.remove("show");
+    if(modal) modal.classList.remove("show");
 
     createWordDisplay();
     createKeyboard();
 }
 
 function createWordDisplay() {
+    if(!wordDisplay) return;
     wordDisplay.innerHTML = "";
     for (let letter of selectedWord) {
         const slot = document.createElement("div");
@@ -101,6 +95,7 @@ function createWordDisplay() {
 }
 
 function createKeyboard() {
+    if(!keyboardContainer) return;
     keyboardContainer.innerHTML = "";
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
@@ -125,7 +120,7 @@ function handleGuess(letter, button) {
         button.classList.add("wrong");
         drawBodyPart();
         wrongAttempts++;
-        attemptsSpan.innerText = maxAttempts - wrongAttempts;
+        if(attemptsSpan) attemptsSpan.innerText = maxAttempts - wrongAttempts;
         checkLose();
     }
 }
@@ -133,7 +128,8 @@ function handleGuess(letter, button) {
 function drawBodyPart() {
     const partId = bodyParts[wrongAttempts];
     if (partId) {
-        document.getElementById(partId).classList.add("show");
+        const el = document.getElementById(partId);
+        if(el) el.classList.add("show");
     }
 }
 
@@ -152,57 +148,49 @@ function checkLose() {
 }
 
 function showEndModal(title, message, isWin) {
+    if(!modalTitle || !modalMessage || !eduText || !modal) return;
     modalTitle.innerText = title;
     modalTitle.style.color = isWin ? "var(--accent-color)" : "var(--wrong-color)";
     modalMessage.innerText = message;
-    
     eduText.innerText = selectedWordObj.edu;
     modal.classList.add("show");
 }
 
-resetBtn.addEventListener("click", initGame);
-modalBtn.addEventListener("click", initGame);
+if(resetBtn) resetBtn.addEventListener("click", initGame);
+if(modalBtn) modalBtn.addEventListener("click", initGame);
 
-
-// ============================================================================
-// 3. NOVOS ELEMENTOS OBRIGATÓRIOS (Rubricas de JavaScript e Acessibilidade)
-// ============================================================================
-
-// --- Controle de Acessibilidade (Botão de Modo Escuro) ---
-const toggleDarkModeBtn = document.getElementById("toggle-dark-mode");
-toggleDarkModeBtn.addEventListener("click", () => {
-    // Verifica se a tag customizada do tema escuro já está ativa no elemento html
-    const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
-    
-    if (isDarkMode) {
-        document.documentElement.removeAttribute("data-theme");
-    } else {
-        document.documentElement.setAttribute("data-theme", "dark");
-    }
-});
-
-// --- Validador Dinâmico do Quiz de Conscientização ---
-const quizForm = document.getElementById("quiz-form");
-const quizResult = document.getElementById("quiz-result");
-
-quizForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // Impede o envio do formulário tradicional e recarregamento
-    
-    const selectedAnswer = document.getElementById("quiz-q1").value;
-    
-    // Altera e manipula dinamicamente classes e textos do DOM com respostas estruturadas
-    quizResult.classList.remove("hidden");
-    
-    if (selectedAnswer === "correta") {
-        quizResult.innerHTML = "<strong>✅ Resposta Correta!</strong> Piscar de forma não natural, falhas ao redor das bordas do rosto e iluminações inconsistentes são as principais pistas de que uma inteligência artificial manipulou aquele vídeo.";
-        quizResult.className = "quiz-feedback correct-box";
-    } else {
-        quizResult.innerHTML = "<strong>❌ Tente Novamente!</strong> Embora a alta definição exista, ela não serve como método para confirmar adulteração. Foque nos sinais biológicos (olhos, boca e sombras).";
-        quizResult.className = "quiz-feedback wrong-box";
-    }
-});
-
-// Inicialização Geral do Website
-window.onload = () => {
+// --- INTERAÇÕES DE ACESSIBILIDADE E QUIZ (Protegidas) ---
+document.addEventListener("DOMContentLoaded", () => {
     initGame();
-};
+
+    const toggleDarkModeBtn = document.getElementById("toggle-dark-mode");
+    if(toggleDarkModeBtn) {
+        toggleDarkModeBtn.addEventListener("click", () => {
+            const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
+            if (isDarkMode) {
+                document.documentElement.removeAttribute("data-theme");
+            } else {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        });
+    }
+
+    const quizForm = document.getElementById("quiz-form");
+    const quizResult = document.getElementById("quiz-result");
+
+    if(quizForm && quizResult) {
+        quizForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const selectedAnswer = document.getElementById("quiz-q1").value;
+            quizResult.classList.remove("hidden");
+            
+            if (selectedAnswer === "correta") {
+                quizResult.innerHTML = "<strong>✅ Resposta Correta!</strong> Piscar de forma não natural, falhas ao redor das bordas do rosto e iluminações inconsistentes são as principais pistas de manipulação por IA.";
+                quizResult.className = "quiz-feedback correct-box";
+            } else {
+                quizResult.innerHTML = "<strong>❌ Tente Novamente!</strong> Embora a alta definição exista, ela não serve como método para confirmar adulteração. Foque nos sinais biológicos.";
+                quizResult.className = "quiz-feedback wrong-box";
+            }
+        });
+    }
+});
