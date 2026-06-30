@@ -8,29 +8,28 @@
 </head>
 <body>
 
-    <!-- Acessibilidade: Item obrigatório para o JavaScript Nível 4 -->
-    <div class="accessibility-bar">
-        <button id="toggle-dark-mode" class="btn-toggle" aria-label="Alternar modo escuro">🌓 Alternar Modo Escuro</button>
-    </div>
+    <!-- Bloco de Acessibilidade e Conteúdos alinhados verticalmente -->
+    <div class="game-container">
+        
+        <div class="accessibility-bar">
+            <button id="toggle-dark-mode" class="btn-toggle">🌓 Alternar Modo Escuro</button>
+        </div>
 
-    <main class="game-container">
-        <header>
-            <h1>Forca da Cidadania Digital</h1>
-            <p class="subtitle">O Impacto das Deepfakes e da Desinformação na Sociedade</p>
-        </header>
-
-        <!-- Seção do Jogo da Forca Original -->
+        <!-- SEÇÃO 1: O JOGO DA FORCA -->
         <section id="game-section">
+            <header>
+                <h1>Forca da Cidadania Digital</h1>
+                <p class="subtitle">O Impacto das Deepfakes e da Desinformação na Sociedade</p>
+            </header>
+
             <p class="tip">Dica contextual: <span id="tip-text">...</span></p>
             
             <div class="gallows-container">
                 <svg height="220" width="200" class="gallows">
-                    <!-- Estrutura da forca -->
                     <line x1="20" y1="200" x2="100" y2="200" class="base" />
                     <line x1="60" y1="20" x2="60" y2="200" class="pole" />
                     <line x1="60" y1="20" x2="140" y2="20" class="beam" />
                     <line x1="140" y1="20" x2="140" y2="50" class="rope" />
-                    <!-- Partes do corpo -->
                     <circle cx="140" cy="70" r="18" id="head" class="body-part" />
                     <line x1="140" y1="88" x2="140" y2="140" id="body" class="body-part" />
                     <line x1="140" y1="100" x2="110" y2="120" id="left-arm" class="body-part" />
@@ -50,7 +49,7 @@
             <button id="reset-btn" class="btn">Próximo Conceito</button>
         </section>
 
-        <!-- Desafio Técnico Obrigatório: Formulário de Conscientização e Quiz Dinâmico -->
+        <!-- SEÇÃO 2: O QUIZ ANTI-DESINFORMAÇÃO -->
         <section id="quiz-section">
             <h2>Quiz Anti-Desinformação</h2>
             <p class="quiz-instruction">Teste sua capacidade de identificar mídias manipuladas por IA (Deepfakes):</p>
@@ -64,32 +63,28 @@
                         <option value="errada">O vídeo possuir alta definição de imagem e áudio estéreo padrão</option>
                     </select>
                 </div>
-
                 <button type="submit" id="submit-quiz" class="btn">Validar Resposta</button>
             </form>
             
-            <!-- Div dinâmica que será manipulada via JS para mostrar o resultado -->
             <div id="quiz-result" class="hidden"></div>
         </section>
-    </main>
 
-    <!-- Modal de Fim de Jogo e Informação Educativa (Mantido Original) -->
+    </div>
+
+    <!-- MODAL PEDAGÓGICO -->
     <div class="modal" id="result-modal">
         <div class="modal-content">
             <h2 id="modal-title">Resultado</h2>
             <p id="modal-message"></p>
-            
-            <!-- Bloco de Impacto Social / Conteúdo Educativo -->
             <div id="educational-info" class="edu-box">
                 <h3>💡 Impacto na Sociedade:</h3>
                 <p id="edu-text"></p>
             </div>
-
             <button id="modal-btn" class="btn">Continuar Aprendendo</button>
         </div>
     </div>
 
-    <!-- Footer Semântico exigido pela Rubrica A -->
+    <!-- RODAPÉ SEMÂNTICO (Fora do container do jogo para ficar na base da página) -->
     <footer>
         <p>&copy; 2026 - Portal de Conscientização Comunitária desenvolvido para o projeto #cidadaniadigital2026. Conteúdo 100% autoral.</p>
     </footer>
